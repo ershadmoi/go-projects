@@ -1,0 +1,19 @@
+# This is a sample configuration entry that works off of localhost
+# The configuration-reader follows a standard paradigm.
+# Anything starting with a "#<space>"is a comment and it is ignored
+
+# Anything starting with an "@" is a node info entry
+# e.g. "@ <NodeNum> <HostName> <PortNum>
+@ 0 localhost 8000
+@ 1 localhost 8001
+@ 2 localhost 8002
+@ 3 localhost 8004
+@ 4 localhost 8005
+
+# Anything starting with an "!" is a connection information entry
+# e.g. "! <SourceNodeNum>  <DestNodeNum1> <DestNodeNum2> ....
+! 0 1 2 3 4
+! 1 0 2 3 4
+! 2 0 1 4
+! 3 0 1 4
+! 4 0 1 2 3
