@@ -11,7 +11,8 @@ import(
 )
 
 /* Read the config file into a list of nodes and connections) */
-func ReadConfig(filename string) (nodemap map[string] nodeinfo.Nodes, connections [][]int) {
+func ReadConfig(filename string) (nodes map[string] nodeinfo.Node,
+            nodemap map[string] nodeinfo.Nodes, connections [][]int) {
     // Open the config file
     file, err :=  os.Open(filename)
 
@@ -30,7 +31,7 @@ func ReadConfig(filename string) (nodemap map[string] nodeinfo.Nodes, connection
     }
 
     // Initialize a map of nodes to store all node information when reading
-    nodes := make(map[string] nodeinfo.Node)
+    nodes = make(map[string] nodeinfo.Node)
     nodemap = make(map[string] nodeinfo.Nodes)
 
     // Get a new scanner
@@ -95,7 +96,7 @@ func processNodeEntry(nodes map[string] nodeinfo.Node, entry string) {
         // No efforts to handle bad config cases
         fmt.Println("Updating node nodes: ", nodes);
         nodes[tokens[1]] = nodeinfo.Node{
-            Nodenum: getInt(tokens[1]), Hostname: tokens[2], Portnum:  getInt(tokens[3]),
+            Nodenum: tokens[1], Hostname: tokens[2], Portnum: tokens[3],
         }
     }
 }
