@@ -87,19 +87,17 @@ func startServer(node Node, c chan net.Conn) {
 
 func readWhenDataIsAvailable(conn net.Conn) {
     // Read as long as there is data
-    go func() {
-        buffer := make([]byte, 256)
-        for conn.Read(buffer) {
-            if(bytes.Equal(buffer, []byte("quit"))) {
-                conn.Close()
-                break
-            }
-
-            log.Println("Read data from client : ", conn, " with value : ", string(buffer))
+    buffer := make([]byte, 256)
+    for conn.Read(buffer) {
+        if(bytes.Equal(buffer, []byte("quit"))) {
+            conn.Close()
+            break
         }
 
-        log.Println("Connection closed from client : ", conn)
-    } ()
+        log.Println("Read data from client : ", conn, " with value : ", string(buffer))
+    }
+
+    log.Println("Connection closed from client : ", conn)
 }
 
 func connectToNodesBeforeUs(self int, nodes Nodes, c chan Node) {
