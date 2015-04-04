@@ -4,6 +4,9 @@ import(
     "github.com/ershadmoi/go-projects/lamport-logical-clock/nodeinfo"
     "flag"
     "fmt"
+    "bufio"
+    "os"
+    "strings"
 )
 
 func main() {
@@ -14,10 +17,15 @@ func main() {
     nodes, nodemap, connections :=  config.ReadConfig("config/config.txt")
     go nodeinfo.SetupConnections(*nodenumPtr, nodes, nodemap, connections )
 
+    // Let's start some random simulation of send/receive events to update our clocks
+
     // For now blocking on user input
     // So that main thread doesnt die
-    var input string
-    fmt.Scanln(&input)
-
-    // Let's start some random simulation of send/receive events to update our clocks
+    scanner := bufio.NewScanner(os.Stdin)
+    for scanner.Scan() {
+        switch input := scanner.Scan(); {
+            case strings.Contains(input, "quit") : break
+            default : fmt.Println("Type 'quit' anytime to kill this node")
+        }
+    }
 }
