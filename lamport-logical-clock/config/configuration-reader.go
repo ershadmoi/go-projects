@@ -2,12 +2,12 @@ package config
 
 import(
     "bufio"
-    "fmt"
     "os"
     "log"
     "strings"
     "github.com/ershadmoi/go-projects/lamport-logical-clock/nodeinfo"
     "strconv"
+    "github.com/ershadmoi/go-projects/lamport-logical-clock/utils"
 )
 
 /* Read the config file into a list of nodes and connections) */
@@ -52,10 +52,10 @@ func ReadConfig(filename string) (nodes map[string] nodeinfo.Node,
 
             // Comment line case
             case strings.HasPrefix(entry, "#") :
-                fmt.Println("Comment line : " , entry)
+                log.Println("Comment line : " , entry)
 
             default :
-                fmt.Println("Unknown file entry : " , entry)
+                log.Println("Unknown file entry : " , entry)
         }
     }
 
@@ -83,8 +83,8 @@ func updateNodeMap(nodes map[string] nodeinfo.Node,
 
 /* Process the node entry read from the file - Uses reference based updates */
 func processNodeEntry(nodes map[string] nodeinfo.Node, entry string) {
-    fmt.Println("Processing node entry : ", entry)
-    fmt.Println("If you see index out of bound errors, please check your config.txt for unwanted spaces.")
+    log.Println("Processing node entry : ", entry)
+    log.Println("If you see index out of bound errors, please check your config.txt for unwanted spaces.")
 
     // Tokenize the line entry
     tokens := strings.Split(entry, " ")
@@ -94,7 +94,7 @@ func processNodeEntry(nodes map[string] nodeinfo.Node, entry string) {
         // We will just blindly fail if format is not met
         // With index out of bound exceptions and some error logging
         // No efforts to handle bad config cases
-        fmt.Println("Updating node nodes: ", nodes);
+        log.Println("Updating node nodes: ", nodes);
         nodes[tokens[1]] = nodeinfo.Node{
             Nodenum: tokens[1], Hostname: tokens[2], Portnum: tokens[3],
         }
@@ -103,26 +103,16 @@ func processNodeEntry(nodes map[string] nodeinfo.Node, entry string) {
 
 /* Process the connection entry read from the file - Uses reference based updates */
 func processConnectionEntry(connections [][]int, entry string) {
-    fmt.Println("Processing connection entry : ", entry)
+    log.Println("Processing connection entry : ", entry)
     tokens := strings.Split(entry, " ")
-    source := getInt(tokens[1])
-    fmt.Println("Processing connections for source node : " , source)
+    source := utils.GetInt(tokens[1])
+    log.Println("Processing connections for source node : " , source)
 
     for i, val := range tokens {
         if i > 1 {
-            fmt.Println("Adding connection link : ", source , " dest " , val)
-            connections[source][getInt(val)] = 1
+            log.Println("Adding connection link : ", source , " dest " , val)
+            connections[source][utils.GetInt(val)] = 1
         }
     }
-}
-
-/* Small helper to translate strings to integers */
-func getInt(str string) (val int) {
-    val, err := strconv.Atoi(str)
-    if err != nil {
-        log.Fatal("Cannot convert to integer : ", str)
-    }
-
-    return
 }
 
